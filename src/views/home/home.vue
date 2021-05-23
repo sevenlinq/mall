@@ -83,7 +83,7 @@
   import FeatureViews from "./childComponent/FeatureViews";
   import tabControl from "components/content/tabControl/tabControl";
 
-  import {getHomeList} from "../../network/home";
+  import {getHomeList, getHomeData} from "../../network/home";
 
   export default {
     name: "home",
@@ -106,12 +106,28 @@
       }
     },
     created() {
-      getHomeList().then(res => {
-        this.banner = res.data.banner.list
-        this.recommend = res.data.recommend.list
-      }).catch(err => {
-        console.log(err)
-      })
+      this.getHomeList()
+
+      this.getHomeData("pop")
+    },
+    methods: {
+      getHomeList(){
+        getHomeList().then(res => {
+          this.banner = res.data.banner.list
+          this.recommend = res.data.recommend.list
+        }).catch(err => {
+          console.log(err)
+        })
+      },
+      getHomeData(type){
+        const page = this.goods[type].page + 1
+        getHomeData(type,page).then(res => {
+          // this.goods[type].list.push(...res.list)
+          console.log(res)
+        }).catch(err => {
+          console.log(err)
+        })
+      }
     }
   }
 </script>
